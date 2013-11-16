@@ -59,7 +59,7 @@ Public Class Form1
         /* En este ejemplo se esta utilizando un archivo XML para ser timbrado, 
           * * tambien soporta pasarle como parametro el XML en forma de cadena
         */
-        xmlfile = "C:\FacturacionModernaCSharp\ejemplos\archivo.xml"
+        xmlfile = "\ruta\hacia\el\archivo\archivo.xml"
         r_wsconect = timbra.Timbrar(xmlfile, reqt)
         If Not r_wsconect.status Then
             MessageBox.Show(r_wsconect.message)
