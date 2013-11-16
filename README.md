@@ -49,7 +49,7 @@ Public Class Form1
         
         /* Crear la instancia de la clase requestTimbrarCFDI() para poder cambiar los parametros de conexión */          
         Dim reqt As New requestTimbrarCFDI()
-        /* Ejemplo para modifcar el RFC emisor */
+        /* Ejemplo para modificar el RFC emisor */
         /* reqt.emisorRFC = XXXXXXXXXXXX */
  
         /* Crear instancia de la clase Timbrado() para la generacion de comprobantes */ 
