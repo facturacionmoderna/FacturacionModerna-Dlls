@@ -16,6 +16,7 @@ Dlls compiladas para diferentes versiones de .Net
   * Crea la conexión con los parámetros ingresados
   * Timbra un xml o un layout
   * Cancela un comprobante
+  * Activa la cancelación con el certificado especificado
 
 
 ## Ejemplo de uso
@@ -72,7 +73,7 @@ Public Class Form1
 End Class
 ```
 
-## Ejemplo de uso
+## Dudas
 Si tiene alguna duda sobre la implementación de está clase, puede contactarnos a: 
 
 desarrollo@facturacionmoderna.com 
