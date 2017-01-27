@@ -12,7 +12,7 @@ Dlls compiladas para las versiones 2, 3, 3.5, 4 y 4.5 de Framework.Net
   * Obtiene información del certificado
   * Agrega el sello, certificado y número de certificado al xml
 
-* WSConecFM.dll
+* ConnectionWSFM.dll
   * Crea la conexión con los parámetros ingresados
   * Timbra un xml o un layout
   * Cancela un comprobante
@@ -131,7 +131,7 @@ private void cmdGenerarSello_Click(object sender, EventArgs e)
     }
 
     // Obtenemos un xml con sello e información del certificado, listo para ser timbrado
-    // haciendo uso de WSConecFM.dll
+    // haciendo uso de ConnectionWSFM.dll
     xmlfile = newXML;
 }
 ```
