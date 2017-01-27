@@ -137,7 +137,7 @@ private void cmdGenerarSello_Click(object sender, EventArgs e)
 ```
 
 
-## Ejemplo de implementación WSConecFM.dll
+## Ejemplo de implementación ConnectionWSFM.dll
 
 1.- Descargar el contenido de las DLLs
  
@@ -148,7 +148,7 @@ private void cmdGenerarSello_Click(object sender, EventArgs e)
 Implementación:
 ```C#
 // Importar la clase.
-Using WSConecFM;
+Using ConnectionWSFM;
  
 private void cmdTimbrarXML_Click(object sender, EventArgs e)
 {
@@ -157,68 +157,62 @@ private void cmdTimbrarXML_Click(object sender, EventArgs e)
    string resultPath = currentPath + "\\resultados";
    
    /*  CREAR LA CONFIGURACION DE CONEXION CON EL SERVICIO SOAP
-    * *    Los parametros configurables son:
-    * *    1.- string UserID; Nombre de usuario que se utiliza para la conexion con SOAP
-    * *    2.- string UserPass; Contraseña del usuario para conectarse a SOAP
-    * *    3.- string emisorRFC; RFC del contribuyente
-    * *    4.- Boolean generarCBB; Indica si se desea generar el CBB
-    * *    5.- Boolean generarTXT; Indica si se desea generar el TXT
-    * *    6.- Boolean generarPDF; Indica si se desea generar el PDF
-    * *    7.- string urlTimbrado; URL de la conexion con SOAP
-    * La configuracion inicial es para el ambiente de pruebas
-   */
-   
-   WSConecFM.Resultados r_wsconect = new WSConecFM.Resultados();
-   requestTimbrarCFDI reqt = new requestTimbrarCFDI();
-   /*
-    * Si desea cambiar alguna configuracion, solo realizar lo siguiente
-    * reqt.generarPDF = true;  Por poner un ejemplo
-   */
-   
-   /*  TIMBRAR XML
-    * *    Los parametros enviados son:
-    * *    1.- XML; (Acepta una ruta o una cadena)
-    * *    2.- Objeto con las configuraciones de conexion con SOAP
-    * Retorna un objeto con los siguientes valores codificado en base 64:
-    * *    1.- xml en base 64
-    * *    2.- pdf en base 64
-    * *    3.- png en base 64
-    * *    4.- txt en base 64
-    * Los valores de retorno van a depender de la configuracion enviada a la función
-   */
-   
-   string xmlfile = "C:\ejemploXML.xml";
-   Timbrado timbra = new Timbrado();
-   r_wsconect = timbra.Timbrar(xmlfile, reqt);
-   if (!r_wsconect.status)
-   {
-       MessageBox.Show(r_wsconect.message);
-       Environment.Exit(-1);
-   }
-   byte[] byteXML = System.Convert.FromBase64String(r_wsconect.xmlBase64);
-   System.IO.FileStream swxml = new System.IO.FileStream((resultPath + ("\\" + (r_wsconect.uuid + ".xml"))), System.IO.FileMode.Create);
-   swxml.Write(byteXML, 0, byteXML.Length);
-   swxml.Close();
-   if (reqt.generarCBB) {
-       byte[] byteCBB = System.Convert.FromBase64String(r_wsconect.cbbBase64);
-       System.IO.FileStream swcbb = new System.IO.FileStream((resultPath + ("\\" + (r_wsconect.uuid + ".png"))), System.IO.FileMode.Create);
-       swcbb.Write(byteCBB, 0, byteCBB.Length);
-       swcbb.Close();
-   }
-   if (reqt.generarPDF)
-   {
-       byte[] bytePDF = System.Convert.FromBase64String(r_wsconect.pdfBase64);
-       System.IO.FileStream swpdf = new System.IO.FileStream((resultPath + ("\\" + (r_wsconect.uuid + ".pdf"))), System.IO.FileMode.Create);
-       swpdf.Write(bytePDF, 0, bytePDF.Length);
-       swpdf.Close();
-   }
-   if (reqt.generarTXT)
-   {
-       byte[] byteTXT = System.Convert.FromBase64String(r_wsconect.txtBase64);
-       System.IO.FileStream swtxt = new System.IO.FileStream((resultPath + ("\\" + (r_wsconect.uuid + ".txt"))), System.IO.FileMode.Create);
-       swtxt.Write(byteTXT, 0, byteTXT.Length);
-       swtxt.Close();
-   }
+	 * *    Los parametros configurables son:
+	 * *    1.- Nombre de usuario que se utiliza para la conexion al Web Service
+	 * *    2.- Contraseña del usuario que se utiliza para la conexion al Web Service
+	 * *    3.- RFC Emisor
+	 * *    4.- Habilitar el retorno del CBB
+	 * *    5.- Habilitar el retorno del TXT
+	 * *    6.- Habilitar el retorno del PDF
+	 * *    7.- URL del Web Service (endpoint)
+	 * *    8.- Habilitar debug para guardar Request y Response (Si se habilita, se debe de especificar una ruta del archivo log)
+	 * * La configuracion inicial es para el ambiente de pruebas
+	*/
+	ConnectionFM conX = new ConnectionFM();
+	conX.setDebugMode(true);
+	conX.setLogFilePath(currentPath + "\\logs\\log.txt");
+	conX.setGenerarPdf(true);
+
+
+	/*  Timbrar Layout
+	 * *   Se envia el layout a timbrar, puede ser una xml o un txt, especificando la ruta del archivo
+	 * *   o un string conteniendo todo el layout
+	 */
+	if (conX.timbrarLayout(newXml) == true)
+	{
+		byte[] byteXML = System.Convert.FromBase64String(conX.getXmlB64());
+		System.IO.FileStream swxml = new System.IO.FileStream((resultPath + ("\\" + (conX.getUuid() + ".xml"))), System.IO.FileMode.Create);
+		swxml.Write(byteXML, 0, byteXML.Length);
+		swxml.Close();
+
+		if (conX.getCbbB64() != "")
+		{
+			byte[] byteCBB = System.Convert.FromBase64String(conX.getCbbB64());
+			System.IO.FileStream swcbb = new System.IO.FileStream((resultPath + ("\\" + (conX.getUuid() + ".png"))), System.IO.FileMode.Create);
+			swcbb.Write(byteCBB, 0, byteCBB.Length);
+			swcbb.Close();
+		}
+		if (conX.getPdfB64() != "")
+		{
+			byte[] bytePDF = System.Convert.FromBase64String(conX.getPdfB64());
+			System.IO.FileStream swpdf = new System.IO.FileStream((resultPath + ("\\" + (conX.getUuid() + ".pdf"))), System.IO.FileMode.Create);
+			swpdf.Write(bytePDF, 0, bytePDF.Length);
+			swpdf.Close();
+		}
+		if (conX.getTxtB64() != "")
+		{
+			byte[] byteTXT = System.Convert.FromBase64String(conX.getTxtB64());
+			System.IO.FileStream swtxt = new System.IO.FileStream((resultPath + ("\\" + (conX.getUuid() + ".txt"))), System.IO.FileMode.Create);
+			swtxt.Write(byteTXT, 0, byteTXT.Length);
+			swtxt.Close();
+		}
+		MessageBox.Show("Comprobante guardado en " + resultPath + "\\");
+	}
+	else
+	{
+		MessageBox.Show("[" + conX.getErrorCode() + "] " + conX.getErrorMessage());
+	}
+
 }
 ```
 ## Dudas
