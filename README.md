@@ -36,8 +36,8 @@ private void cmdGenerarSello_Click(object sender, EventArgs e)
 {
     // Especificar ruta de los archivos .cer y .key
     string currentPath = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.Parent.FullName;
-    string keyfile = currentPath + "\\utilerias\\certificados\\20001000000200000278.key";
-    string certfile = currentPath + "\\utilerias\\certificados\\20001000000200000278.cer";
+    string keyfile = currentPath + "\\utilerias\\certificados\\20001000000300022759.key";
+    string certfile = currentPath + "\\utilerias\\certificados\\20001000000300022759.cer";
     
     // Especificar ruta del xslt 
     string xsltPath;
